@@ -1,5 +1,6 @@
-package xyz.ariefbayu.xyzbarcodescanner
+package com.mickenet.privateLibrarian.mickenet
 
+import com.mickenet.privateLibrarian.mickenet.privateLibrarian.R
 import android.content.Context
 import android.os.Build
 import android.support.v7.app.AppCompatActivity

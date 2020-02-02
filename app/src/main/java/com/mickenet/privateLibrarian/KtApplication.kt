@@ -1,4 +1,4 @@
-package xyz.ariefbayu.xyzbarcodescanner
+package com.mickenet.privateLibrarian.mickenet
 
 import android.support.multidex.MultiDexApplication
 
