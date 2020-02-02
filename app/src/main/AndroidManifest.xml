@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="xyz.ariefbayu.xyzbarcodescanner">
+    package="com.mickenet.privateLibrarian.mickenet.privateLibrarian.mickenet.privateLibrarian">
 
     <application
-        android:name=".KtApplication"
+        android:name="com.mickenet.privateLibrarian.mickenet.privateLibrarian.KtApplication"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name="com.mickenet.privateLibrarian.mickenet.MainActivity"
             android:screenOrientation="portrait">
         </activity>
         <activity android:name=".InlineScanActivity">
