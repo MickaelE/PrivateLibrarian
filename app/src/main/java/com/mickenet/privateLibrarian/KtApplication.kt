@@ -1,6 +1,6 @@
-package com.mickenet.privateLibrarian.mickenet
+package com.mickenet.privateLibrarian
 
-import android.support.multidex.MultiDexApplication
+import androidx.multidex.MultiDexApplication
 
 class KtApplication: MultiDexApplication(){
     override fun onCreate() {

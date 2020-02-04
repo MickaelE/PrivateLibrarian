@@ -1,11 +1,13 @@
-package com.mickenet.privateLibrarian.mickenet
+package com.mickenet.privateLibrarian
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
 import kotlinx.android.synthetic.main.activity_main.*
+
+
 
 class MainActivity : AppCompatActivity() {
     var scannedResult: String = ""
@@ -48,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         super.onRestoreInstanceState(savedInstanceState)
 
         savedInstanceState?.let {
-            scannedResult = it.getString("scannedResult")
+            scannedResult = it.getString("scannedResult")!!
             txtValue.text = scannedResult
         }
     }
