@@ -18,11 +18,7 @@ import com.mickenet.privateLibrarian.Books.BookAdapter
 import com.mickenet.privateLibrarian.ISBN.BookClient
 import kotlinx.android.synthetic.main.activity_inline_scan.*
 import okhttp3.Headers
-import okhttp3.internal.http2.Header
 import org.json.JSONArray
-import org.json.JSONException
-import org.json.JSONObject
-
 
 
 class InlineScanActivity : AppCompatActivity() {
@@ -43,12 +39,12 @@ class InlineScanActivity : AppCompatActivity() {
         bookAdapter = BookAdapter(this, aBooks)
         lvBooks?.setAdapter(bookAdapter)
         btnScan.setOnClickListener {
-            txtResult.text = "scaning..."
+            txtResult.text = "scanning..."
             barcodeView.decodeSingle(object: BarcodeCallback{
                 override fun barcodeResult(result: BarcodeResult?) {
                     result?.let {
                         txtResult.text = it.text
-                     //  fetchBooks(it.text)
+                       fetchBooks(it.text)
                         val vib: Vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
                         if(vib.hasVibrator()) if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
@@ -97,11 +93,37 @@ class InlineScanActivity : AppCompatActivity() {
         super.onDestroy()
         captureManager.onDestroy()
     }
-    private fun fetchBooks(isbn:String)
-    var client: BookClient()
-    client.
+    private fun fetchBooks(isbn:String){
+        var client = BookClient()
 
+        client.getBooks(isbn, object: JsonHttpResponseHandler(){
+            override fun onSuccess(statusCode: Int, headers: Headers?, json: JSON?) {
+                var docs: JSONArray
+                var book: Book
+                if (json != null) {
+                    // Get the docs json array
+                    docs = json.jsonObject.getJSONArray("docs")
+                    // Parse json array into array of model objects
+                    var books: ArrayList<Book> = Book.fromJson(docs);
+                    // Remove all books from the adapter
+                    bookAdapter?.clear();
+                    // Load model objects into the adapter
+                    for (book in books) {
+                        bookAdapter?.add(book); // add book through the adapter
+                    }
+                    bookAdapter?.notifyDataSetChanged();
+                }
+            }
+            override fun onFailure(
+                statusCode: Int,
+                headers: Headers?,
+                response: String?,
+                throwable: Throwable?
+            ) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
 
+        })
     }
 
 }
