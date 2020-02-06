@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">PrivateLibrarian</string>
+    <string name="todo">TODO</string>
+    <string name="author">Author</string>
+    <string name="title">Title</string>
+    <string name="picture">Picture</string>
 </resources>

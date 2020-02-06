@@ -2,19 +2,23 @@ package com.mickenet.privateLibrarian
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ListAdapter
+import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
+import com.mickenet.privateLibrarian.Books.BookAdapter
 import kotlinx.android.synthetic.main.activity_main.*
-
 
 
 class MainActivity : AppCompatActivity() {
     var scannedResult: String = ""
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
         btnScan.setOnClickListener {
             run {
@@ -56,3 +60,4 @@ class MainActivity : AppCompatActivity() {
     }
 
 }
+

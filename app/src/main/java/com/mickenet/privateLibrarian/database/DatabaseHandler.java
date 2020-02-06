@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 import com.mickenet.privateLibrarian.Books.Book;
 
@@ -18,10 +19,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String openLibraryId = "openLibraryId";
     private static final String KEY_AUTHOR = "author";
     private static final String KEY_TITLE = "title";
+    private Context context;
 
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
         //3rd argument to be passed is CursorFactory instance
     }
 
@@ -54,9 +57,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_TITLE, books.getTitle());
 
         // Inserting Row
-        db.insert(TABLE_BOOKS, null, values);
+        try {
+            db.insert(TABLE_BOOKS, null, values);
+        } catch (Exception e) {
+            db.close(); // Closing database connection
+            Context context = this.context;
+            CharSequence text = e.getLocalizedMessage();
+            int duration = Toast.LENGTH_SHORT;
+
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+        } finally {
+            db.close(); // Closing database connection
+        }
         //2nd argument is String containing nullColumnHack
-        db.close(); // Closing database connection
+
     }
 
     // code to get the single contact
@@ -77,7 +92,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // code to get all contacts in a list view
     public List<Book> getAllBooks() {
-        List<Book> contactList = new ArrayList<Book>();
+        List<Book> bookList = new ArrayList<Book>();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_BOOKS;
 
@@ -92,12 +107,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 book.setAuthor(cursor.getString(1));
                 book.setTitle(cursor.getString(2));
                 // Adding book to list
-                contactList.add(book);
+                bookList.add(book);
             } while (cursor.moveToNext());
         }
 
         // return contact list
-        return contactList;
+        return bookList;
     }
 
     // code to update the single book

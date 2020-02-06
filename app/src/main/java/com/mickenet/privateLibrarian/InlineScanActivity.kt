@@ -6,7 +6,9 @@ import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.widget.AdapterView
 import android.widget.ListView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler
 import com.google.zxing.ResultPoint
@@ -26,7 +28,6 @@ class InlineScanActivity : AppCompatActivity() {
     lateinit var captureManager: CaptureManager
     var scanState: Boolean = false
     var torchState: Boolean = false
-    val lvBooks: ListView? = null
     var bookAdapter: BookAdapter? = null
     val aBooks: ArrayList<Book> = ArrayList<Book>()
     var db = DatabaseHandler(this)
@@ -34,11 +35,12 @@ class InlineScanActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_inline_scan)
-
+        var lvBooks = findViewById<ListView>(R.id.lvbooks);
         captureManager = CaptureManager(this, barcodeView)
         captureManager.initializeFromIntent(intent, savedInstanceState)
         bookAdapter = BookAdapter(this, aBooks)
-        lvBooks?.setAdapter(bookAdapter)
+        lvBooks?.adapter = bookAdapter
+
         btnScan.setOnClickListener {
             txtResult.text = "scanning..."
             barcodeView.decodeSingle(object: BarcodeCallback{
@@ -116,13 +118,19 @@ class InlineScanActivity : AppCompatActivity() {
                     bookAdapter?.notifyDataSetChanged();
                 }
             }
+
             override fun onFailure(
                 statusCode: Int,
                 headers: Headers?,
                 response: String?,
                 throwable: Throwable?
             ) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                val text = "Failure"
+                val duration = Toast.LENGTH_SHORT
+
+                val toast = Toast.makeText(applicationContext, text, duration)
+                toast.show()
+
             }
 
         })
