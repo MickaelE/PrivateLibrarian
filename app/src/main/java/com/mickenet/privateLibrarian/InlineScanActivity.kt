@@ -16,6 +16,7 @@ import com.journeyapps.barcodescanner.CaptureManager
 import com.mickenet.privateLibrarian.Books.Book
 import com.mickenet.privateLibrarian.Books.BookAdapter
 import com.mickenet.privateLibrarian.ISBN.BookClient
+import com.mickenet.privateLibrarian.database.DatabaseHandler
 import kotlinx.android.synthetic.main.activity_inline_scan.*
 import okhttp3.Headers
 import org.json.JSONArray
@@ -28,7 +29,7 @@ class InlineScanActivity : AppCompatActivity() {
     val lvBooks: ListView? = null
     var bookAdapter: BookAdapter? = null
     val aBooks: ArrayList<Book> = ArrayList<Book>()
-
+    var db = DatabaseHandler(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -109,6 +110,7 @@ class InlineScanActivity : AppCompatActivity() {
                     bookAdapter?.clear();
                     // Load model objects into the adapter
                     for (book in books) {
+                       db.addBook(book)
                         bookAdapter?.add(book); // add book through the adapter
                     }
                     bookAdapter?.notifyDataSetChanged();

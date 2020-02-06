@@ -1,8 +1,7 @@
-package com.mickenet.privateLibrarian.mickenet.privateLibrarian
+package com.mickenet.privateLibrarian
 
 import org.junit.Test
 
-import org.junit.Assert.*
 
 /**
  * Example local unit test, which will execute on the development machine (host).

@@ -11,7 +11,16 @@ import java.util.ArrayList;
 public class Book {
     private String openLibraryId;
     private String author;
-    private String title;
+
+    public Book() {
+    }
+
+    private String title;public Book(String _openLibraryId,String _author, String _title){
+        this.openLibraryId = _openLibraryId;
+        this.author = _author;
+        this.title = _title;
+    }
+
 
     public String getOpenLibraryId() {
         return openLibraryId;
@@ -25,6 +34,18 @@ public class Book {
         return author;
     }
 
+    public void setOpenLibraryId(String openLibraryId) {
+        this.openLibraryId = openLibraryId;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     // Get medium sized book cover from covers API
     public String getCoverUrl() {
         return "http://covers.openlibrary.org/b/olid/" + openLibraryId + "-M.jpg?default=false";
@@ -34,6 +55,7 @@ public class Book {
     public String getLargeCoverUrl() {
         return "http://covers.openlibrary.org/b/olid/" + openLibraryId + "-L.jpg?default=false";
     }
+
     // Returns a Book given the expected JSON
     public static Book fromJson(JSONObject jsonObject) {
         Book book = new Book();

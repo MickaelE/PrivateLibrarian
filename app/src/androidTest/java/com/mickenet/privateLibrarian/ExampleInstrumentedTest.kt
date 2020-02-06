@@ -1,4 +1,4 @@
-package com.mickenet.privateLibrarian.mickenet.privateLibrarian
+package com.mickenet.privateLibrarian
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -18,7 +18,7 @@ class ExampleInstrumentedTest {
     @Test
     fun useAppContext() {
         // Context of the app under test.
-        val appContext = InstrumentationRegistry.getTargetContext()
-        assertEquals("com.mickenet.privateLibrarian.mickenet.PrivateLibrarian", appContext.packageName)
+        val appContext = InstrumentationRegistry.getInstrumentation().getTargetContext()
+        assertEquals("com.mickenet.privateLibrarian", appContext.packageName)
     }
 }
