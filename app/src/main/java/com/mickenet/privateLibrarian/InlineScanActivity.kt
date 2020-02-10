@@ -35,11 +35,8 @@ class InlineScanActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_inline_scan)
-        var lvBooks = findViewById<ListView>(R.id.lvbooks);
         captureManager = CaptureManager(this, barcodeView)
         captureManager.initializeFromIntent(intent, savedInstanceState)
-        bookAdapter = BookAdapter(this, aBooks)
-        lvBooks?.adapter = bookAdapter
 
         btnScan.setOnClickListener {
             txtResult.text = "scanning..."

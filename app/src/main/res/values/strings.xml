@@ -4,4 +4,7 @@
     <string name="author">Author</string>
     <string name="title">Title</string>
     <string name="picture">Picture</string>
+    <string name="scan">Scan</string>
+    <string name="scanned_value">Scanned Value:</string>
+    <string name="please_scan_first">{{please scan first}}</string>
 </resources>
