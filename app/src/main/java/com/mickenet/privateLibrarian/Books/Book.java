@@ -1,11 +1,13 @@
 package com.mickenet.privateLibrarian.Books;
 
+import android.net.Uri;
 import android.text.TextUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URI;
 import java.util.ArrayList;
 
 public class Book {
@@ -47,13 +49,13 @@ public class Book {
     }
 
     // Get medium sized book cover from covers API
-    public String getCoverUrl() {
-        return "http://covers.openlibrary.org/b/olid/" + openLibraryId + "-M.jpg?default=false";
+    public Uri getCoverUrl() {
+        return Uri.parse("http://covers.openlibrary.org/b/olid/" + openLibraryId + "-M.jpg?default=false");
     }
 
     // Get large sized book cover from covers API
-    public String getLargeCoverUrl() {
-        return "http://covers.openlibrary.org/b/olid/" + openLibraryId + "-L.jpg?default=false";
+    public Uri getLargeCoverUrl() {
+        return Uri.parse("http://covers.openlibrary.org/b/olid/" + openLibraryId + "-L.jpg?default=false");
     }
 
     // Returns a Book given the expected JSON

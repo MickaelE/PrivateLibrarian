@@ -6,8 +6,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.widget.AdapterView
-import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler
@@ -105,12 +103,13 @@ class InlineScanActivity : AppCompatActivity() {
                     docs = json.jsonObject.getJSONArray("docs")
                     // Parse json array into array of model objects
                     var books: ArrayList<Book> = Book.fromJson(docs);
-                    // Remove all books from the adapter
-                    bookAdapter?.clear();
-                    // Load model objects into the adapter
-                    for (book in books) {
-                       db.addBook(book)
-                        bookAdapter?.add(book); // add book through the adapter
+                    bookAdapter = BookAdapter(books);
+                   // Load model objects into the adapter
+                    try {
+                        for (book in books) {
+                            db.addBook(book)
+                         }
+                    } catch (e: Exception) {
                     }
                     bookAdapter?.notifyDataSetChanged();
                 }
