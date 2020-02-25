@@ -1,16 +1,13 @@
 <resources>
     <string name="app_name">PrivateLibrarian</string>
-    <string name="todo">TODO</string>
     <string name="author">Author</string>
     <string name="title">Title</string>
     <string name="picture">Picture</string>
     <string name="scan">Scan</string>
     <string name="scanned_value">Scanned Value:</string>
     <string name="please_scan_first">{{please scan first}}</string>
-    <string name="textview">TextView</string>
     <string name="Star">*</string>
-    <string name="result">Result:</string>
-    <string name="TreeDots">...</string>
     <string name="search">Manual</string>
     <string name="isbn">ISBN</string>
+    <string name="Scan_fail">scan failed</string>
 </resources>

@@ -2,7 +2,6 @@ package com.mickenet.privatelibrarian
 
 
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
@@ -15,9 +14,9 @@ import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.CaptureManager
+import com.mickenet.privatelibrarian.ISBN.BookClient
 import com.mickenet.privatelibrarian.books.Book
 import com.mickenet.privatelibrarian.books.BookAdapter
-import com.mickenet.privatelibrarian.ISBN.BookClient
 import com.mickenet.privatelibrarian.database.DatabaseHandler
 import kotlinx.android.synthetic.main.activity_inline_scan.*
 import okhttp3.Headers
@@ -25,11 +24,10 @@ import org.json.JSONArray
 
 
 class InlineScanActivity : AppCompatActivity() {
-    lateinit var captureManager: CaptureManager
+    private lateinit var captureManager: CaptureManager
     private lateinit var viewManager: RecyclerView.LayoutManager
     private val adapter = BookAdapter()
-    var scanState: Boolean = false
-    var torchState: Boolean = false
+    private var torchState: Boolean = false
     var db = DatabaseHandler(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,11 +49,11 @@ class InlineScanActivity : AppCompatActivity() {
             barcodeView.decodeSingle(object: BarcodeCallback{
                 override fun barcodeResult(result: BarcodeResult?) {
                     result?.let {
-                        txtIbdn.setText(it.text.toString())
+                        txtisbn.setText(it.text.toString())
                        fetchBooks(it.text.toString())
                         val vib: Vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
-                        if(vib.hasVibrator()) if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                        if(vib.hasVibrator())
                             // void vibrate (VibrationEffect vibe)
                             vib.vibrate(
                                 VibrationEffect.createOneShot(
@@ -64,10 +62,6 @@ class InlineScanActivity : AppCompatActivity() {
                                     VibrationEffect.DEFAULT_AMPLITUDE
                                 )
                             )
-                        }else{
-                            // This method was deprecated in API level 26
-                            vib.vibrate(100)
-                        }
                     }
                 }
 
@@ -85,8 +79,8 @@ class InlineScanActivity : AppCompatActivity() {
                 barcodeView.setTorchOn()
             }
         }
-        btnSearch.setOnClickListener(){
-            fetchBooks(txtIbdn.text.toString())
+        btnSearch.setOnClickListener {
+            fetchBooks(txtisbn.text.toString())
         }
     }
 
@@ -105,17 +99,17 @@ class InlineScanActivity : AppCompatActivity() {
         captureManager.onDestroy()
     }
     private fun fetchBooks(isbn:String){
-        var client = BookClient()
+        val client = BookClient()
 
         client.getBooks(isbn, object: JsonHttpResponseHandler(){
             override fun onSuccess(statusCode: Int, headers: Headers?, json: JSON?) {
-                var docs: JSONArray
+                val docs: JSONArray
                 if (json != null) {
                     // Get the docs json array
                     docs = json.jsonObject.getJSONArray("docs")
                     // Parse json array into array of model objects
-                    var books: ArrayList<Book> = Book.fromJson(docs);
-                   // Load model objects into the adapter
+                    val books: ArrayList<Book> = Book.fromJson(docs)
+                    // Load model objects into the adapter
                     try {
                         for (book in books) {
                             db.addBook(book)

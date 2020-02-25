@@ -26,8 +26,8 @@ class BookAdapter : ListAdapter<Book, BookAdapter.ItemViewholder>(DiffCallback()
 
     class ItemViewholder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(item: Book) = with(itemView) {
-            itemView.tvTitle.setText(item.title)
-            itemView.tvAuthor.setText(item.author)
+            itemView.tvTitle.text = item.title
+            itemView.tvAuthor.text = item.author
             itemView.ivBookCover.setImageURI(item.coverUrl)
 
             setOnClickListener {

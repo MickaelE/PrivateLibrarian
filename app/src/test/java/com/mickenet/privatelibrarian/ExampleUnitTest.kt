@@ -1,5 +1,6 @@
 package com.mickenet.privatelibrarian
 
+import junit.framework.Assert.assertEquals
 import org.junit.Test
 
 

@@ -2,19 +2,14 @@ package com.mickenet.privatelibrarian
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
-import com.mickenet.privatelibrarian.books.Book
-import com.mickenet.privatelibrarian.books.BookAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
-    var scannedResult: String = ""
+    private var scannedResult: String = ""
 
         override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +24,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
-        var result: IntentResult? = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+        val result: IntentResult? = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
 
         if(result != null){
 
@@ -37,7 +32,7 @@ class MainActivity : AppCompatActivity() {
                 scannedResult = result.contents
                 txtValue.text = scannedResult
             } else {
-                txtValue.text = "scan failed"
+                txtValue.text = getString(R.string.Scan_fail)
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data)

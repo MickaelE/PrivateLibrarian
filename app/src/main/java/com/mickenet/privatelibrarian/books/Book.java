@@ -9,19 +9,21 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+@SuppressWarnings("Convert2Diamond")
 public class Book {
     private String openLibraryId;
     private String author;
+    private String title;
+
+  /*  public Book(String openLibraryId, String author, String title) {
+        this.openLibraryId = openLibraryId;
+        this.author = author;
+        this.title = title;
+    }*/
 
     public Book() {
-    }
 
-    private String title;public Book(String _openLibraryId,String _author, String _title){
-        this.openLibraryId = _openLibraryId;
-        this.author = _author;
-        this.title = _title;
     }
-
 
     public String getOpenLibraryId() {
         return openLibraryId;
@@ -58,7 +60,7 @@ public class Book {
     }
 
     // Returns a Book given the expected JSON
-    public static Book fromJson(JSONObject jsonObject) {
+    private static Book fromJson(JSONObject jsonObject) {
         Book book = new Book();
         try {
             // Deserialize json into object fields
@@ -99,7 +101,7 @@ public class Book {
         // Process each result in json array, decode and convert to business
         // object
         for (int i = 0; i < jsonArray.length(); i++) {
-            JSONObject bookJson = null;
+            JSONObject bookJson;
             try {
                 bookJson = jsonArray.getJSONObject(i);
             } catch (Exception e) {

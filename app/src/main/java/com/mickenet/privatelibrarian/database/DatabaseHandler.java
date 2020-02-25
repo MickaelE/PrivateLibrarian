@@ -19,7 +19,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String openLibraryId = "openLibraryId";
     private static final String KEY_AUTHOR = "author";
     private static final String KEY_TITLE = "title";
-    private Context context;
+    private final Context context;
 
 
     public DatabaseHandler(Context context) {
@@ -84,15 +84,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if (cursor != null)
             cursor.moveToFirst();
 
-        Book contact = new Book(cursor.getString(0),
-                cursor.getString(1), cursor.getString(2));
+        Book contact = new Book(
+        );
         // return contact
+        assert cursor != null;
+        cursor.close();
         return contact;
     }
 
     // code to get all contacts in a list view
     public List<Book> getAllBooks() {
-        List<Book> bookList = new ArrayList<Book>();
+        @SuppressWarnings("Convert2Diamond") List<Book> bookList = new ArrayList<Book>();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_BOOKS;
 
@@ -110,7 +112,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 bookList.add(book);
             } while (cursor.moveToNext());
         }
-
+        cursor.close();
         // return contact list
         return bookList;
     }
