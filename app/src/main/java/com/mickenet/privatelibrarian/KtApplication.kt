@@ -1,4 +1,4 @@
-package com.mickenet.privateLibrarian
+package com.mickenet.privatelibrarian
 
 import androidx.multidex.MultiDexApplication
 

@@ -1,4 +1,4 @@
-package com.mickenet.privateLibrarian.ISBN;
+package com.mickenet.privatelibrarian.ISBN;
 
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;

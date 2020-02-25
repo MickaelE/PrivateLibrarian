@@ -1,15 +1,15 @@
-package com.mickenet.privateLibrarian.Books
+package com.mickenet.privatelibrarian.books
 
-import android.support.v7.recyclerview.extensions.ListAdapter
-import android.support.v7.util.DiffUtil
-import android.support.v7.widget.RecyclerView
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.mickenet.privateLibrarian.R
+import com.mickenet.privatelibrarian.R
+import kotlinx.android.synthetic.main.item_books.view.*
 
 class BookAdapter : ListAdapter<Book, BookAdapter.ItemViewholder>(DiffCallback()) {
 
@@ -26,22 +26,29 @@ class BookAdapter : ListAdapter<Book, BookAdapter.ItemViewholder>(DiffCallback()
 
     class ItemViewholder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(item: Book) = with(itemView) {
-            // TODO: Bind the data with View
+            itemView.tvTitle.setText(item.title)
+            itemView.tvAuthor.setText(item.author)
+            itemView.ivBookCover.setImageURI(item.coverUrl)
 
             setOnClickListener {
-                // TODO: Handle on click
+                Toast.makeText(
+                    itemView.context,
+                    item.toString(),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
 }
 
 class DiffCallback : DiffUtil.ItemCallback<Book>() {
-
     override fun areItemsTheSame(oldItem: Book, newItem: Book): Boolean {
-        return oldItem?.openLibraryId == newItem?.openLibraryId
+       return oldItem.openLibraryId == newItem.openLibraryId
     }
 
+    @SuppressLint("DiffUtilEquals")
     override fun areContentsTheSame(oldItem: Book, newItem: Book): Boolean {
-        return oldItem.equals(newItem)
+        return oldItem == newItem
     }
+
 }

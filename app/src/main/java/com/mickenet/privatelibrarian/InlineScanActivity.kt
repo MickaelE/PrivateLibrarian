@@ -1,4 +1,4 @@
-package com.mickenet.privateLibrarian
+package com.mickenet.privatelibrarian
 
 
 import android.content.Context
@@ -8,15 +8,17 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler
 import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.CaptureManager
-import com.mickenet.privateLibrarian.Books.Book
-import com.mickenet.privateLibrarian.Books.BookAdapter
-import com.mickenet.privateLibrarian.ISBN.BookClient
-import com.mickenet.privateLibrarian.database.DatabaseHandler
+import com.mickenet.privatelibrarian.books.Book
+import com.mickenet.privatelibrarian.books.BookAdapter
+import com.mickenet.privatelibrarian.ISBN.BookClient
+import com.mickenet.privatelibrarian.database.DatabaseHandler
 import kotlinx.android.synthetic.main.activity_inline_scan.*
 import okhttp3.Headers
 import org.json.JSONArray
@@ -24,25 +26,33 @@ import org.json.JSONArray
 
 class InlineScanActivity : AppCompatActivity() {
     lateinit var captureManager: CaptureManager
+    private lateinit var viewManager: RecyclerView.LayoutManager
+    private val adapter = BookAdapter()
     var scanState: Boolean = false
     var torchState: Boolean = false
-    var bookAdapter: BookAdapter? = null
-    val aBooks: ArrayList<Book> = ArrayList<Book>()
     var db = DatabaseHandler(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_inline_scan)
+        val text = "scanning..."
+        val duration = Toast.LENGTH_SHORT
+
         captureManager = CaptureManager(this, barcodeView)
         captureManager.initializeFromIntent(intent, savedInstanceState)
-
+        viewManager = LinearLayoutManager(this)
+        simple_recyclerview.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        //https://android.jlelse.eu/recylerview-list-adapter-template-in-kotlin-6b9814201458
+        simple_recyclerview.adapter = adapter
         btnScan.setOnClickListener {
-            txtResult.text = "scanning..."
+            //txtResult.text = "scanning..."
+            val toast = Toast.makeText(applicationContext, text, duration)
+            toast.show()
             barcodeView.decodeSingle(object: BarcodeCallback{
                 override fun barcodeResult(result: BarcodeResult?) {
                     result?.let {
-                        txtResult.text = it.text
-                       fetchBooks(it.text)
+                        txtIbdn.setText(it.text.toString())
+                       fetchBooks(it.text.toString())
                         val vib: Vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
                         if(vib.hasVibrator()) if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
@@ -75,6 +85,9 @@ class InlineScanActivity : AppCompatActivity() {
                 barcodeView.setTorchOn()
             }
         }
+        btnSearch.setOnClickListener(){
+            fetchBooks(txtIbdn.text.toString())
+        }
     }
 
     override fun onPause() {
@@ -97,13 +110,11 @@ class InlineScanActivity : AppCompatActivity() {
         client.getBooks(isbn, object: JsonHttpResponseHandler(){
             override fun onSuccess(statusCode: Int, headers: Headers?, json: JSON?) {
                 var docs: JSONArray
-                var book: Book
                 if (json != null) {
                     // Get the docs json array
                     docs = json.jsonObject.getJSONArray("docs")
                     // Parse json array into array of model objects
                     var books: ArrayList<Book> = Book.fromJson(docs);
-                    bookAdapter = BookAdapter(books);
                    // Load model objects into the adapter
                     try {
                         for (book in books) {
@@ -111,7 +122,8 @@ class InlineScanActivity : AppCompatActivity() {
                          }
                     } catch (e: Exception) {
                     }
-                    bookAdapter?.notifyDataSetChanged();
+                    adapter.submitList(books)
+
                 }
             }
 

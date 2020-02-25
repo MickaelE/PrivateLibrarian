@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-        package="com.mickenet.privateLibrarian">
+        package="com.mickenet.privatelibrarian">
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
-            android:name=".KtApplication"
+            android:name="com.mickenet.privatelibrarian.KtApplication"
             android:allowBackup="true"
             android:hardwareAccelerated="true"
             android:icon="@mipmap/ic_launcher"
@@ -16,11 +16,10 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true">
-        <activity android:name=".BookActivity"></activity>
         <activity
-                android:name=".MainActivity"
-                android:screenOrientation="portrait"></activity>
-        <activity android:name=".InlineScanActivity">
+                android:name="com.mickenet.privatelibrarian.MainActivity"
+                android:screenOrientation="fullSensor"></activity>
+        <activity android:name="com.mickenet.privatelibrarian.InlineScanActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

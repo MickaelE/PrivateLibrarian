@@ -1,4 +1,4 @@
-package com.mickenet.privateLibrarian.database;
+package com.mickenet.privatelibrarian.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 
-import com.mickenet.privateLibrarian.Books.Book;
+import com.mickenet.privatelibrarian.books.Book;
 
 import java.util.ArrayList;
 import java.util.List;

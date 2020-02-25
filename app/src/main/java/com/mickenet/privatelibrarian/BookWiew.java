@@ -1,4 +1,4 @@
-package com.mickenet.privateLibrarian;
+package com.mickenet.privatelibrarian;
 
 import android.content.Context;
 import android.util.AttributeSet;

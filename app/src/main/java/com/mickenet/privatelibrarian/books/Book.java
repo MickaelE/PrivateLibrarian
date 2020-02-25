@@ -1,4 +1,4 @@
-package com.mickenet.privateLibrarian.Books;
+package com.mickenet.privatelibrarian.books;
 
 import android.net.Uri;
 import android.text.TextUtils;
@@ -7,7 +7,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URI;
 import java.util.ArrayList;
 
 public class Book {
