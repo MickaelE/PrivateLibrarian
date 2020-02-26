@@ -32,7 +32,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_BOOK_TABLE = "CREATE TABLE " + TABLE_BOOKS+ "("
-                + openLibraryId + " INTEGER PRIMARY KEY,"
+                + openLibraryId + " TEXT PRIMARY KEY,"
                 + KEY_AUTHOR + " TEXT," + KEY_TITLE + " TEXT" +" )";
         db.execSQL(CREATE_BOOK_TABLE);
     }

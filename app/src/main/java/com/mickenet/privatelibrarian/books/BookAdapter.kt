@@ -8,6 +8,8 @@ import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.mickenet.privatelibrarian.MyAppGlideModule
 import com.mickenet.privatelibrarian.R
 import kotlinx.android.synthetic.main.item_books.view.*
 
@@ -28,8 +30,7 @@ class BookAdapter : ListAdapter<Book, BookAdapter.ItemViewholder>(DiffCallback()
         fun bind(item: Book) = with(itemView) {
             itemView.tvTitle.text = item.title
             itemView.tvAuthor.text = item.author
-            itemView.ivBookCover.setImageURI(item.coverUrl)
-
+            Glide.with(this).load(item.coverUrl).into(itemView.ivBookCover);
             setOnClickListener {
                 Toast.makeText(
                     itemView.context,

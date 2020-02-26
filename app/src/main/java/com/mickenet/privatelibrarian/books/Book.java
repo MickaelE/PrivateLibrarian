@@ -15,11 +15,11 @@ public class Book {
     private String author;
     private String title;
 
-  /*  public Book(String openLibraryId, String author, String title) {
+  public Book(String openLibraryId, String author, String title) {
         this.openLibraryId = openLibraryId;
         this.author = author;
         this.title = title;
-    }*/
+    }
 
     public Book() {
 
