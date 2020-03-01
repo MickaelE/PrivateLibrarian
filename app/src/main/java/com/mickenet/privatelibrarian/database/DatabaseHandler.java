@@ -7,18 +7,19 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 
-import com.mickenet.privatelibrarian.books.Book;
+import com.mickenet.privatelibrarian.books.LocalBook;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "bookManager";
+    private static final int DATABASE_VERSION = 2;
+    private static final String DATABASE_NAME = "bookManager.db";
     private static final String TABLE_BOOKS = "books";
     private static final String openLibraryId = "openLibraryId";
     private static final String KEY_AUTHOR = "author";
     private static final String KEY_TITLE = "title";
+    private static final String KEY_URI = "uri";
     private final Context context;
 
 
@@ -33,7 +34,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_BOOK_TABLE = "CREATE TABLE " + TABLE_BOOKS+ "("
                 + openLibraryId + " TEXT PRIMARY KEY,"
-                + KEY_AUTHOR + " TEXT," + KEY_TITLE + " TEXT" +" )";
+                + KEY_AUTHOR + " TEXT," + KEY_TITLE + " TEXT," + KEY_URI + " TEXT" + " )";
         db.execSQL(CREATE_BOOK_TABLE);
     }
 
@@ -48,13 +49,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     // code to add the new books
-    public void addBook(Book books) {
+    public void addBook(LocalBook books) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(openLibraryId, books.getOpenLibraryId());
         values.put(KEY_AUTHOR, books.getAuthor());
         values.put(KEY_TITLE, books.getTitle());
+        if(books.getCoverMedium() !=null)
+            values.put(KEY_URI, books.getCoverMedium().toString());
 
         // Inserting Row
         try {
@@ -75,7 +78,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     // code to get the single contact
-    Book getBook(int id) {
+    LocalBook getBook(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_BOOKS, new String[] { openLibraryId,
@@ -84,7 +87,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if (cursor != null)
             cursor.moveToFirst();
 
-        Book contact = new Book(
+        LocalBook contact = new LocalBook(
         );
         // return contact
         assert cursor != null;
@@ -93,8 +96,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     // code to get all contacts in a list view
-    public List<Book> getAllBooks() {
-        @SuppressWarnings("Convert2Diamond") List<Book> bookList = new ArrayList<Book>();
+    public List<LocalBook> getAllBooks() {
+        @SuppressWarnings("Convert2Diamond") List<LocalBook> bookList = new ArrayList<LocalBook>();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_BOOKS;
 
@@ -104,7 +107,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
-                Book book = new Book();
+                LocalBook book = new LocalBook();
                 book.setOpenLibraryId(cursor.getString(0));
                 book.setAuthor(cursor.getString(1));
                 book.setTitle(cursor.getString(2));
@@ -118,7 +121,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     // code to update the single book
-    public int updateBook(Book book) {
+    public int updateBook(LocalBook book) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -131,7 +134,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     // Deleting single book
-    public void deleteBook(Book book) {
+    public void deleteBook(LocalBook book) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_BOOKS, openLibraryId + " = ?",
                 new String[] { String.valueOf(book.getOpenLibraryId()) });

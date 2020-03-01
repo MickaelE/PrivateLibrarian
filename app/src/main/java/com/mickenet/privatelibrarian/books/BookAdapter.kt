@@ -9,11 +9,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.mickenet.privatelibrarian.MyAppGlideModule
 import com.mickenet.privatelibrarian.R
 import kotlinx.android.synthetic.main.item_books.view.*
 
-class BookAdapter : ListAdapter<Book, BookAdapter.ItemViewholder>(DiffCallback()) {
+class BookAdapter : ListAdapter<LocalBook, BookAdapter.ItemViewholder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewholder {
         return ItemViewholder(
@@ -27,10 +26,10 @@ class BookAdapter : ListAdapter<Book, BookAdapter.ItemViewholder>(DiffCallback()
     }
 
     class ItemViewholder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(item: Book) = with(itemView) {
+        fun bind(item: LocalBook) = with(itemView) {
             itemView.tvTitle.text = item.title
             itemView.tvAuthor.text = item.author
-            Glide.with(this).load(item.coverUrl).into(itemView.ivBookCover);
+            Glide.with(this).load(item.coverMedium).into(itemView.ivBookCover);
             setOnClickListener {
                 Toast.makeText(
                     itemView.context,
@@ -42,13 +41,13 @@ class BookAdapter : ListAdapter<Book, BookAdapter.ItemViewholder>(DiffCallback()
     }
 }
 
-class DiffCallback : DiffUtil.ItemCallback<Book>() {
-    override fun areItemsTheSame(oldItem: Book, newItem: Book): Boolean {
+class DiffCallback : DiffUtil.ItemCallback<LocalBook>() {
+    override fun areItemsTheSame(oldItem: LocalBook, newItem: LocalBook): Boolean {
        return oldItem.openLibraryId == newItem.openLibraryId
     }
 
     @SuppressLint("DiffUtilEquals")
-    override fun areContentsTheSame(oldItem: Book, newItem: Book): Boolean {
+    override fun areContentsTheSame(oldItem: LocalBook, newItem: LocalBook): Boolean {
         return oldItem == newItem
     }
 

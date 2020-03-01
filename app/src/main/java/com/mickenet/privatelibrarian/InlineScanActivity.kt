@@ -2,26 +2,22 @@ package com.mickenet.privatelibrarian
 
 
 import android.content.Context
-import android.os.Build
-import android.os.Bundle
-import android.os.VibrationEffect
-import android.os.Vibrator
+import android.os.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler
+import com.google.api.client.json.JsonFactory
+import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.CaptureManager
-import com.mickenet.privatelibrarian.books.Book
+import com.mickenet.privatelibrarian.ISBN.GoogleBooksApi
 import com.mickenet.privatelibrarian.books.BookAdapter
-import com.mickenet.privatelibrarian.ISBN.BookClient
+import com.mickenet.privatelibrarian.books.LocalBook
 import com.mickenet.privatelibrarian.database.DatabaseHandler
 import kotlinx.android.synthetic.main.activity_inline_scan.*
-import okhttp3.Headers
-import org.json.JSONArray
 
 
 class InlineScanActivity : AppCompatActivity() {
@@ -37,12 +33,15 @@ class InlineScanActivity : AppCompatActivity() {
         setContentView(R.layout.activity_inline_scan)
         val text = "scanning..."
         val duration = Toast.LENGTH_SHORT
-
+       var  policy:StrictMode.ThreadPolicy  =  StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy)
         captureManager = CaptureManager(this, barcodeView)
         captureManager.initializeFromIntent(intent, savedInstanceState)
         simple_recyclerview.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         //https://android.jlelse.eu/recylerview-list-adapter-template-in-kotlin-6b9814201458
         simple_recyclerview.adapter = adapter
+        var booklist = db.allBooks
+        adapter.submitList(booklist)
         btnScan.setOnClickListener {
             //txtResult.text = "scanning..."
             val toast = Toast.makeText(applicationContext, text, duration)
@@ -104,43 +103,21 @@ class InlineScanActivity : AppCompatActivity() {
         captureManager.onDestroy()
     }
     private fun fetchBooks(isbn:String){
-        var client = BookClient()
-
-        client.getBooks(isbn, object: JsonHttpResponseHandler(){
-            override fun onSuccess(statusCode: Int, headers: Headers?, json: JSON?) {
-                var docs: JSONArray
-                if (json != null) {
-                    // Get the docs json array
-                    docs = json.jsonObject.getJSONArray("docs")
-                    // Parse json array into array of model objects
-                    var books: ArrayList<Book> = Book.fromJson(docs);
-                   // Load model objects into the adapter
-                    try {
-                        for (book in books) {
-                            db.addBook(book)
-                         }
-                    } catch (e: Exception) {
-                    }
-                    adapter.submitList(books)
-
-                }
+        val text = "Failure"
+        val duration = Toast.LENGTH_SHORT
+        try {
+            var query = "isbn:$isbn"
+            val jsonFactory: JsonFactory  = JacksonFactory.getDefaultInstance()
+            var bookList = GoogleBooksApi.queryGoogleBooks(jsonFactory, query)
+            adapter.submitList(bookList)
+            for(book in bookList){
+                db.addBook(book)
             }
+        } catch (e: Exception) {
+            val toast = Toast.makeText(applicationContext, text, duration)
+            toast.show()
+        }
 
-            override fun onFailure(
-                statusCode: Int,
-                headers: Headers?,
-                response: String?,
-                throwable: Throwable?
-            ) {
-                val text = "Failure"
-                val duration = Toast.LENGTH_SHORT
-
-                val toast = Toast.makeText(applicationContext, text, duration)
-                toast.show()
-
-            }
-
-        })
     }
 
 }

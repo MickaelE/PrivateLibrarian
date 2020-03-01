@@ -7,21 +7,24 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URI;
 import java.util.ArrayList;
 
 @SuppressWarnings("Convert2Diamond")
-public class Book {
+public class LocalBook {
     private String openLibraryId;
     private String author;
     private String title;
+    private Uri coverMedium;
 
-  public Book(String openLibraryId, String author, String title) {
+  public LocalBook(String openLibraryId, String author, String title,Uri coverMedium) {
         this.openLibraryId = openLibraryId;
         this.author = author;
         this.title = title;
+        this.coverMedium = coverMedium;
     }
 
-    public Book() {
+    public LocalBook() {
 
     }
 
@@ -49,19 +52,17 @@ public class Book {
         this.title = title;
     }
 
-    // Get medium sized book cover from covers API
-    public Uri getCoverUrl() {
-        return Uri.parse("http://covers.openlibrary.org/b/olid/" + openLibraryId + "-M.jpg?default=false");
+    public Uri getCoverMedium() {
+        return coverMedium;
     }
 
-    // Get large sized book cover from covers API
-    public Uri getLargeCoverUrl() {
-        return Uri.parse("http://covers.openlibrary.org/b/olid/" + openLibraryId + "-L.jpg?default=false");
+    public void setCoverMedium(Uri coverMedium) {
+        this.coverMedium = coverMedium;
     }
 
     // Returns a Book given the expected JSON
-    private static Book fromJson(JSONObject jsonObject) {
-        Book book = new Book();
+    private static LocalBook fromJson(JSONObject jsonObject) {
+        LocalBook book = new LocalBook();
         try {
             // Deserialize json into object fields
             // Check if a cover edition is available
@@ -96,8 +97,8 @@ public class Book {
         }
     }
     // Decodes array of book json results into business model objects
-    public static ArrayList<Book> fromJson(JSONArray jsonArray) {
-        ArrayList<Book> books = new ArrayList<Book>(jsonArray.length());
+    public static ArrayList<LocalBook> fromJson(JSONArray jsonArray) {
+        ArrayList<LocalBook> books = new ArrayList<LocalBook>(jsonArray.length());
         // Process each result in json array, decode and convert to business
         // object
         for (int i = 0; i < jsonArray.length(); i++) {
@@ -108,7 +109,7 @@ public class Book {
                 e.printStackTrace();
                 continue;
             }
-            Book book = Book.fromJson(bookJson);
+            LocalBook book = LocalBook.fromJson(bookJson);
             if (book != null) {
                 books.add(book);
             }
