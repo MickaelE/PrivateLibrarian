@@ -9,7 +9,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.mickenet.privatelibrarian.FireMissilesDialogFragment
 import com.mickenet.privatelibrarian.R
+import com.mickenet.privatelibrarian.dialoug_delete
 import kotlinx.android.synthetic.main.item_books.view.*
 
 class BookAdapter : ListAdapter<LocalBook, BookAdapter.ItemViewholder>(DiffCallback()) {
@@ -24,13 +26,16 @@ class BookAdapter : ListAdapter<LocalBook, BookAdapter.ItemViewholder>(DiffCallb
     override fun onBindViewHolder(holder: ItemViewholder, position: Int) {
         holder.bind(getItem(position))
     }
-
+//https://developer.android.com/guide/topics/ui/dialogs#kotlin
     class ItemViewholder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(item: LocalBook) = with(itemView) {
             itemView.tvTitle.text = item.title
             itemView.tvAuthor.text = item.author
             Glide.with(this).load(item.coverMedium).into(itemView.ivBookCover);
             setOnClickListener {
+                val dialog = FireMissilesDialogFragment()
+                dialog.getSupportFragmentManager()
+                dialog.show(supportFragmentManager, "missiles")
                 Toast.makeText(
                     itemView.context,
                     item.toString(),

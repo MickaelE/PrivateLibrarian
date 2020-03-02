@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
 import android.widget.Toast;
 
 import com.mickenet.privatelibrarian.books.LocalBook;
@@ -111,6 +112,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 book.setOpenLibraryId(cursor.getString(0));
                 book.setAuthor(cursor.getString(1));
                 book.setTitle(cursor.getString(2));
+                String medium = cursor.getString(3);
+                if(medium != null) {
+                    book.setCoverMedium(Uri.parse(medium));
+                } else {
+                    Uri uri = Uri.parse("android.resource://"+context.getPackageName()+"/drawable/no_thumbnail");
+                    book.setCoverMedium(uri);
+                }
                 // Adding book to list
                 bookList.add(book);
             } while (cursor.moveToNext());

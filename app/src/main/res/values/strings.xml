@@ -10,4 +10,10 @@
     <string name="search">Manual</string>
     <string name="isbn">ISBN</string>
     <string name="Scan_fail">scan failed</string>
+    <string name="deleteText">Vill du verkligen ta bort boken?</string>
+    <string name="Ok">ok</string>
+    <string name="Cancel">Cancel</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

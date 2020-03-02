@@ -3,6 +3,9 @@ package com.mickenet.privatelibrarian
 
 import android.content.Context
 import android.os.*
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.AdapterView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,33 +30,37 @@ class InlineScanActivity : AppCompatActivity() {
     var scanState: Boolean = false
     var torchState: Boolean = false
     var db = DatabaseHandler(this)
-
+    var menuItemSearch: MenuItem? = null
+    var menuItemDelete: MenuItem? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_inline_scan)
         val text = "scanning..."
         val duration = Toast.LENGTH_SHORT
-       var  policy:StrictMode.ThreadPolicy  =  StrictMode.ThreadPolicy.Builder().permitAll().build();
+        var policy: StrictMode.ThreadPolicy = StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy)
         captureManager = CaptureManager(this, barcodeView)
         captureManager.initializeFromIntent(intent, savedInstanceState)
-        simple_recyclerview.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        simple_recyclerview.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         //https://android.jlelse.eu/recylerview-list-adapter-template-in-kotlin-6b9814201458
         simple_recyclerview.adapter = adapter
         var booklist = db.allBooks
         adapter.submitList(booklist)
+
+
         btnScan.setOnClickListener {
             //txtResult.text = "scanning..."
             val toast = Toast.makeText(applicationContext, text, duration)
             toast.show()
-            barcodeView.decodeSingle(object: BarcodeCallback{
+            barcodeView.decodeSingle(object : BarcodeCallback {
                 override fun barcodeResult(result: BarcodeResult?) {
                     result?.let {
                         txtIbdn.setText(it.text.toString())
-                       fetchBooks(it.text.toString())
+                        fetchBooks(it.text.toString())
                         val vib: Vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
-                        if(vib.hasVibrator()) if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                        if (vib.hasVibrator()) if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             // void vibrate (VibrationEffect vibe)
                             vib.vibrate(
                                 VibrationEffect.createOneShot(
@@ -62,7 +69,7 @@ class InlineScanActivity : AppCompatActivity() {
                                     VibrationEffect.DEFAULT_AMPLITUDE
                                 )
                             )
-                        }else{
+                        } else {
                             // This method was deprecated in API level 26
                             vib.vibrate(100)
                         }
@@ -75,7 +82,7 @@ class InlineScanActivity : AppCompatActivity() {
         }
 
         btnTorch.setOnClickListener {
-            if(torchState){
+            if (torchState) {
                 torchState = false
                 barcodeView.setTorchOff()
             } else {
@@ -83,7 +90,7 @@ class InlineScanActivity : AppCompatActivity() {
                 barcodeView.setTorchOn()
             }
         }
-        btnSearch.setOnClickListener(){
+        btnSearch.setOnClickListener() {
             fetchBooks(txtIbdn.text.toString())
         }
     }
@@ -102,15 +109,16 @@ class InlineScanActivity : AppCompatActivity() {
         super.onDestroy()
         captureManager.onDestroy()
     }
-    private fun fetchBooks(isbn:String){
+
+    private fun fetchBooks(isbn: String) {
         val text = "Failure"
         val duration = Toast.LENGTH_SHORT
         try {
             var query = "isbn:$isbn"
-            val jsonFactory: JsonFactory  = JacksonFactory.getDefaultInstance()
+            val jsonFactory: JsonFactory = JacksonFactory.getDefaultInstance()
             var bookList = GoogleBooksApi.queryGoogleBooks(jsonFactory, query)
             adapter.submitList(bookList)
-            for(book in bookList){
+            for (book in bookList) {
                 db.addBook(book)
             }
         } catch (e: Exception) {
@@ -119,5 +127,4 @@ class InlineScanActivity : AppCompatActivity() {
         }
 
     }
-
 }
