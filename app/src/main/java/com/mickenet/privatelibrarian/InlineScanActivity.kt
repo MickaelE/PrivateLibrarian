@@ -109,21 +109,28 @@ class InlineScanActivity : AppCompatActivity() {
         super.onDestroy()
         captureManager.onDestroy()
     }
-
+public fun deleteBook(isbn: LocalBook) {
+    db.deleteBook(isbn)
+    adapter.notifyItemRemoved( adapter.currentList.indexOf(isbn))
+}
     private fun fetchBooks(isbn: String) {
         val text = "Failure"
+        lateinit var  bookList : List<LocalBook>
         val duration = Toast.LENGTH_SHORT
         try {
             var query = "isbn:$isbn"
             val jsonFactory: JsonFactory = JacksonFactory.getDefaultInstance()
-            var bookList = GoogleBooksApi.queryGoogleBooks(jsonFactory, query)
-            adapter.submitList(bookList)
+            bookList = GoogleBooksApi.queryGoogleBooks(jsonFactory, query)
+            bookList
+
             for (book in bookList) {
                 db.addBook(book)
             }
         } catch (e: Exception) {
-            val toast = Toast.makeText(applicationContext, text, duration)
+            val toast = Toast.makeText(applicationContext, e.message, duration)
             toast.show()
+        }finally {
+            adapter.submitList(bookList)
         }
 
     }
