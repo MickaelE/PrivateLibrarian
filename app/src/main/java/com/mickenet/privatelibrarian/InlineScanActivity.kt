@@ -115,23 +115,27 @@ public fun deleteBook(isbn: LocalBook) {
 }
     private fun fetchBooks(isbn: String) {
         val text = "Failure"
-        lateinit var  bookList : List<LocalBook>
+        var oldList = adapter.currentList
+        lateinit var  bookList : List<LocalBook?>
         val duration = Toast.LENGTH_SHORT
         try {
             var query = "isbn:$isbn"
             val jsonFactory: JsonFactory = JacksonFactory.getDefaultInstance()
             bookList = GoogleBooksApi.queryGoogleBooks(jsonFactory, query)
-            bookList
-
+            var exist = db.getBooksCount()
+            if(exist >0){
             for (book in bookList) {
                 db.addBook(book)
-            }
+                oldList.add(book)
+            }}
         } catch (e: Exception) {
             val toast = Toast.makeText(applicationContext, e.message, duration)
             toast.show()
         }finally {
-            adapter.submitList(bookList)
+            adapter.submitList(oldList)
         }
 
     }
 }
+
+

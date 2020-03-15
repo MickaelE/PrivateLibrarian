@@ -7,9 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.widget.Toast;
-
 import com.mickenet.privatelibrarian.books.LocalBook;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -151,7 +149,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // Getting contacts Count
     public int getBooksCount() {
-        String countQuery = "SELECT  * FROM " + TABLE_BOOKS;
+        String countQuery = "SELECT  * FROM " + TABLE_BOOKS ;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
         cursor.close();
@@ -159,5 +157,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // return count
         return cursor.getCount();
     }
+    // Getting contacts Count
+    public int getBooksCount(String isbn) {
+        String countQuery = "SELECT  * FROM " + TABLE_BOOKS + " where openLibraryId = ?";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery,new String[] { String.valueOf(isbn) });
+        cursor.close();
 
+        // return count
+        return cursor.getCount();
+    }
 }

@@ -69,7 +69,7 @@ public  class GoogleBooksApi {
                     String getmedium = volumeInfo.getImageLinks().getThumbnail();
                     Uri image = Uri.parse(getmedium);
                     localBook.setCoverMedium(image);
-                    localBook.setOpenLibraryId(query);
+                    localBook.setOpenLibraryId(query.substring(5));
                 }
 
             }
