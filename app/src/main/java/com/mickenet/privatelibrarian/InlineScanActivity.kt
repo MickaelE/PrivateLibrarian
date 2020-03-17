@@ -115,6 +115,7 @@ public fun deleteBook(isbn: LocalBook) {
 }
     private fun fetchBooks(isbn: String) {
         val text = "Failure"
+        var exist: Long
         var oldList = adapter.currentList
         lateinit var  bookList : List<LocalBook?>
         val duration = Toast.LENGTH_SHORT
@@ -122,12 +123,15 @@ public fun deleteBook(isbn: LocalBook) {
             var query = "isbn:$isbn"
             val jsonFactory: JsonFactory = JacksonFactory.getDefaultInstance()
             bookList = GoogleBooksApi.queryGoogleBooks(jsonFactory, query)
-            var exist = db.getBooksCount()
-            if(exist >0){
+             exist = db.getBooksCount(isbn)
+            if(exist.equals(0L) ){
             for (book in bookList) {
+                var index = oldList.size
                 db.addBook(book)
-                oldList.add(book)
-            }}
+                //TODO Varför läggs inte boken till i listan
+                oldList.add(index + 1,book)
+            }
+            }
         } catch (e: Exception) {
             val toast = Toast.makeText(applicationContext, e.message, duration)
             toast.show()

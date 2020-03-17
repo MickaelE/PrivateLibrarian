@@ -3,6 +3,7 @@ package com.mickenet.privatelibrarian.database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
@@ -148,23 +149,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     // Getting contacts Count
-    public int getBooksCount() {
-        String countQuery = "SELECT  * FROM " + TABLE_BOOKS ;
+    public long getBooksCount() {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(countQuery, null);
-        cursor.close();
-
-        // return count
-        return cursor.getCount();
+        long count = DatabaseUtils.queryNumEntries(db, TABLE_BOOKS);
+        db.close();
+        return count;
     }
     // Getting contacts Count
-    public int getBooksCount(String isbn) {
-        String countQuery = "SELECT  * FROM " + TABLE_BOOKS + " where openLibraryId = ?";
+    public long getBooksCount(String isbn) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(countQuery,new String[] { String.valueOf(isbn) });
-        cursor.close();
-
-        // return count
-        return cursor.getCount();
+        long count = DatabaseUtils.queryNumEntries(db,TABLE_BOOKS,  "openLibraryId =" + isbn);
+        db.close();
+        return count;
     }
 }
