@@ -1,9 +1,8 @@
 package com.mickenet.privatelibrarian.books
 
 import android.annotation.SuppressLint
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -12,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.mickenet.privatelibrarian.InlineScanActivity
 import com.mickenet.privatelibrarian.R
 import kotlinx.android.synthetic.main.item_books.view.*
+
 
 class BookAdapter : ListAdapter<LocalBook, BookAdapter.ItemViewholder>(DiffCallback()) {
 
@@ -26,37 +26,28 @@ class BookAdapter : ListAdapter<LocalBook, BookAdapter.ItemViewholder>(DiffCallb
         val context = holder.itemView.context
         holder.bind(getItem(position))
     }
-    class ItemViewholder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ItemViewholder(itemView: View) : RecyclerView.ViewHolder(itemView)  {
         fun bind(item: LocalBook) = with(itemView) {
             itemView.tvTitle.text = item.title
             itemView.tvAuthor.text = item.author
             Glide.with(this).load(item.coverMedium).into(itemView.ivBookCover);
-            setOnClickListener {
-                val builder: android.app.AlertDialog.Builder = android.app.AlertDialog.Builder(context)
-                builder.setTitle("PrivateLibrary")
-                builder.setMessage("Vill du verkligen ta bort boken?")
-                //builder.setPositiveButton("OK", DialogInterface.OnClickListener(function = x))
-
-                builder.setPositiveButton(android.R.string.yes) { dialog, which ->
-
-                    if (context is InlineScanActivity) {
-                        (context as InlineScanActivity).deleteBook(item)
-                    }
-
+            itemView.setOnCreateContextMenuListener { contextMenu, _, _ ->
+                contextMenu.add(R.string.contextADD).setOnMenuItemClickListener {
+                    val toast = Toast.makeText(this.context, "I'm pressed for the item at position => $position", 10)
+                    true
                 }
-
-                builder.setNegativeButton(android.R.string.no) { dialog, which ->
-                    Toast.makeText(context,
-                        android.R.string.no, Toast.LENGTH_SHORT).show()
+                contextMenu.add(R.string.contextDelete).setOnMenuItemClickListener {
+                    val toast = Toast.makeText(this.context, "I'm pressed for the item at position => $position", 10)
+                    true
                 }
-
-                builder.show()
-
+                contextMenu.add(R.string.contextInfo).setOnMenuItemClickListener {
+                    val toast = Toast.makeText(this.context, "I'm pressed for the item at position => $position", 10)
+                    true
+                }
             }
         }
-    }
-}
 
+    }
 class DiffCallback : DiffUtil.ItemCallback<LocalBook>() {
     override fun areItemsTheSame(oldItem: LocalBook, newItem: LocalBook): Boolean {
        return oldItem.openLibraryId == newItem.openLibraryId
@@ -67,4 +58,6 @@ class DiffCallback : DiffUtil.ItemCallback<LocalBook>() {
         return oldItem == newItem
     }
 
-}
+}}
+
+

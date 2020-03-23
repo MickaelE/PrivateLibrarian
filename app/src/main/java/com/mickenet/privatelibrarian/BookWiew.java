@@ -2,6 +2,7 @@ package com.mickenet.privatelibrarian;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.ContextMenu;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -21,6 +22,7 @@ public class BookWiew extends LinearLayout {
     }
     private void initView() {
         View view = inflate(getContext(), R.layout.item_books, null);
+
         addView(view);
     }
 }

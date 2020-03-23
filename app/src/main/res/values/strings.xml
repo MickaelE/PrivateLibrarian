@@ -13,4 +13,9 @@
     <string name="deleteText">Vill du verkligen ta bort boken?</string>
     <string name="Ok">ok</string>
     <string name="Cancel">Cancel</string>
+    <string name="PopAdd">Lägg till</string>
+    <string name="popDel">Tabort</string>
+    <string name="contextDelete">Radera</string>
+    <string name="contextADD">Lägga till</string>
+    <string name="contextInfo">Info</string>
 </resources>

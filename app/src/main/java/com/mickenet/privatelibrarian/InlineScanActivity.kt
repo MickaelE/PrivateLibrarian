@@ -30,11 +30,11 @@ class InlineScanActivity : AppCompatActivity() {
     var scanState: Boolean = false
     var torchState: Boolean = false
     var db = DatabaseHandler(this)
-    var menuItemSearch: MenuItem? = null
-    var menuItemDelete: MenuItem? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_inline_scan)
+
         val text = "scanning..."
         val duration = Toast.LENGTH_SHORT
         var policy: StrictMode.ThreadPolicy = StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -128,7 +128,6 @@ public fun deleteBook(isbn: LocalBook) {
             for (book in bookList) {
                 var index = oldList.size
                 db.addBook(book)
-                //TODO Varför läggs inte boken till i listan
                 oldList.add(index + 1,book)
             }
             }
