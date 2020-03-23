@@ -8,8 +8,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.api.services.books.Books
 import com.mickenet.privatelibrarian.InlineScanActivity
 import com.mickenet.privatelibrarian.R
+import com.mickenet.privatelibrarian.database.DatabaseHandler
 import kotlinx.android.synthetic.main.item_books.view.*
 
 
@@ -27,13 +29,15 @@ class BookAdapter : ListAdapter<LocalBook, BookAdapter.ItemViewholder>(DiffCallb
         holder.bind(getItem(position))
     }
     class ItemViewholder(itemView: View) : RecyclerView.ViewHolder(itemView)  {
+        lateinit var db : DatabaseHandler
         fun bind(item: LocalBook) = with(itemView) {
             itemView.tvTitle.text = item.title
             itemView.tvAuthor.text = item.author
             Glide.with(this).load(item.coverMedium).into(itemView.ivBookCover);
             itemView.setOnCreateContextMenuListener { contextMenu, _, _ ->
                 contextMenu.add(R.string.contextADD).setOnMenuItemClickListener {
-                    val toast = Toast.makeText(this.context, "I'm pressed for the item at position => $position", 10)
+                    val book : LocalBook? = null
+                    db.addBook(book)
                     true
                 }
                 contextMenu.add(R.string.contextDelete).setOnMenuItemClickListener {
@@ -42,6 +46,9 @@ class BookAdapter : ListAdapter<LocalBook, BookAdapter.ItemViewholder>(DiffCallb
                 }
                 contextMenu.add(R.string.contextInfo).setOnMenuItemClickListener {
                     val toast = Toast.makeText(this.context, "I'm pressed for the item at position => $position", 10)
+                    var book :LocalBook
+                    book.author =position
+                    db.deleteBook()
                     true
                 }
             }
