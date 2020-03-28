@@ -1,15 +1,15 @@
 package com.mickenet.privatelibrarian.ISBN;
+
 import android.net.Uri;
 
 import com.google.api.client.http.apache.ApacheHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.services.books.Books;
-import com.google.api.services.books.BooksRequestInitializer;
 import com.google.api.services.books.Books.Volumes.List;
+import com.google.api.services.books.BooksRequestInitializer;
 import com.google.api.services.books.model.Volume;
 import com.google.api.services.books.model.Volumes;
 import com.mickenet.privatelibrarian.books.LocalBook;
-import com.mickenet.privatelibrarian.database.DatabaseHandler;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
