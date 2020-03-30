@@ -39,13 +39,11 @@ class BookAdapter : ListAdapter<LocalBook, BookAdapter.ItemViewholder>(DiffCallb
             itemView.setOnCreateContextMenuListener { contextMenu, _, _ ->
 
                 contextMenu.add(R.string.contextDelete).setOnMenuItemClickListener {
-                   var mOos = getAdapterPosition()
                     val book : LocalBook? = item
                     db.deleteBook(book)
                     true
                 }
                 contextMenu.add(R.string.contextInfo).setOnMenuItemClickListener {
-                    val toast = Toast.makeText(this.context, "I'm pressed for the item at position => $position", 10)
                  var book = item
                     db.deleteBook(book)
                     true
