@@ -1,5 +1,8 @@
 package com.mickenet.privatelibrarian.books
 
+/**
+ * Bookadapter for use in a resycle view.
+ */
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
@@ -14,9 +17,13 @@ import com.mickenet.privatelibrarian.R
 import com.mickenet.privatelibrarian.database.DatabaseHandler
 import kotlinx.android.synthetic.main.item_books.view.*
 
-
+/**
+ * Costructor
+ */
 class BookAdapter : ListAdapter<LocalBook, BookAdapter.ItemViewholder>(DiffCallback()) {
-
+    /**
+     * Function to inflate xml resource.
+     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewholder {
         return ItemViewholder(
             LayoutInflater.from(parent.context)
@@ -25,10 +32,17 @@ class BookAdapter : ListAdapter<LocalBook, BookAdapter.ItemViewholder>(DiffCallb
         )
     }
 
+    /**
+     * Bind items to view.
+     */
     override fun onBindViewHolder(holder: ItemViewholder, position: Int) {
         holder.bind(getItem(position))
 
     }
+
+    /**
+     *  procedure to get position and data for a special row in list.
+     */
     override fun getItemId(position: Int): Long = position.toLong()
     class ItemViewholder(itemView: View) : RecyclerView.ViewHolder(itemView)  {
         fun bind(item: LocalBook) = with(itemView) {
@@ -52,11 +66,18 @@ class BookAdapter : ListAdapter<LocalBook, BookAdapter.ItemViewholder>(DiffCallb
         }
 
     }
-class DiffCallback : DiffUtil.ItemCallback<LocalBook>() {
+
+    /**
+     *  Call to callback.
+     */
+    class DiffCallback : DiffUtil.ItemCallback<LocalBook>() {
     override fun areItemsTheSame(oldItem: LocalBook, newItem: LocalBook): Boolean {
        return oldItem.openLibraryId == newItem.openLibraryId
     }
 
+        /**
+         * Fucntion to check for change.
+         */
     @SuppressLint("DiffUtilEquals")
     override fun areContentsTheSame(oldItem: LocalBook, newItem: LocalBook): Boolean {
         return oldItem == newItem

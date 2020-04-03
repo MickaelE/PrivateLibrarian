@@ -1,4 +1,7 @@
 package com.mickenet.privatelibrarian.ISBN;
+/**
+ * Class to get book data by using GOOGLE books api.
+ */
 
 import android.net.Uri;
 
@@ -14,12 +17,22 @@ import com.mickenet.privatelibrarian.books.LocalBook;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 
+/**
+ * Constructor.
+ */
 public  class GoogleBooksApi {
     private static final String APPLICATION_NAME = "";
 
     private static final NumberFormat CURRENCY_FORMATTER = NumberFormat.getCurrencyInstance();
     private static final NumberFormat PERCENT_FORMATTER = NumberFormat.getPercentInstance();
 
+    /**
+     *  Function to do the actual query to the API.
+     * @param jsonFactory An instance of Jsonfactiry,
+     * @param query  A string with isbn number.
+     * @return A List of book object.s
+     * @throws Exception
+     */
     public static java.util.List<LocalBook> queryGoogleBooks(JsonFactory jsonFactory, String query) throws Exception {
         ClientCredentials.errorIfNotSpecified();
         java.util.List<LocalBook> localBooks = new ArrayList<>();

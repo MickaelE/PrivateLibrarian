@@ -1,5 +1,8 @@
 package com.mickenet.privatelibrarian
 
+/**
+ * Class to handle scanning actiivty.
+ */
 
 import android.content.Context
 import android.os.*
@@ -22,7 +25,9 @@ import com.mickenet.privatelibrarian.books.LocalBook
 import com.mickenet.privatelibrarian.database.DatabaseHandler
 import kotlinx.android.synthetic.main.activity_inline_scan.*
 
-
+/**
+ * Construct.
+ */
 class InlineScanActivity : AppCompatActivity() {
     lateinit var captureManager: CaptureManager
     private lateinit var viewManager: RecyclerView.LayoutManager
@@ -31,6 +36,9 @@ class InlineScanActivity : AppCompatActivity() {
     var torchState: Boolean = false
     var db = DatabaseHandler(this)
 
+    /**
+     * Function fired on create.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_inline_scan)
@@ -95,24 +103,41 @@ class InlineScanActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     *  Function to hndle a pause in execution.
+     */
     override fun onPause() {
         super.onPause()
         captureManager.onPause()
     }
 
+    /**
+     * Fucntion fired when resuming.
+     */
     override fun onResume() {
         super.onResume()
         captureManager.onResume()
     }
 
+    /**
+     * On destroing object.
+     */
     override fun onDestroy() {
         super.onDestroy()
         captureManager.onDestroy()
     }
-public fun deleteBook(isbn: LocalBook) {
+
+    /**
+     * Fucntion to delete a book.
+     */
+    public fun deleteBook(isbn: LocalBook) {
     db.deleteBook(isbn)
     adapter.notifyItemRemoved( adapter.currentList.indexOf(isbn))
 }
+
+    /**
+     * Fucntion to fetch a book.
+     */
     private fun fetchBooks(isbn: String) {
         val text = "Failure"
         var exist: Long

@@ -1,4 +1,7 @@
 package com.mickenet.privatelibrarian.database;
+/**
+ * Handle call to sqllite database.
+ */
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,9 +11,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.widget.Toast;
+
 import com.mickenet.privatelibrarian.books.LocalBook;
+
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * Costructor without context
+ */
 
 public class DatabaseHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 2;
@@ -22,14 +31,20 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_URI = "uri";
     private final Context context;
 
-
+    /**
+     * Costructor with context
+     * @param context context object.
+     */
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
         //3rd argument to be passed is CursorFactory instance
     }
 
-    // Creating Tables
+    /**
+     * Initial setup of connection to sqllite database
+     * @param db object of type SQLiteDatabase.
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_BOOK_TABLE = "CREATE TABLE " + TABLE_BOOKS+ "("
@@ -38,7 +53,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(CREATE_BOOK_TABLE);
     }
 
-    // Upgrading database
+    /**
+     * Overided procedure to handle of upgrade of database schema.
+     * @param db  object of SQLiteDatabase
+     * @param oldVersion The version of the old schema.
+     * @param newVersion The version of the new schema.
+     */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
@@ -48,7 +68,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    // code to add the new books
+    /**
+     * Function to add a book object to the database.
+     * @param books A book object.
+     */
     public void addBook(LocalBook books) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -77,7 +100,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     }
 
-    // code to get the single contact
+    /**
+     * Function to get a special book object from the database.
+     * @param id The bookobject id eg. isbm.
+     * @return A book object.
+     */
     LocalBook getBook(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -95,7 +122,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return contact;
     }
 
-    // code to get all contacts in a list view
+    /**
+     * code to get all books from database in a list view
+     * @return A list of books objects.
+     */
     public List<LocalBook> getAllBooks() {
         @SuppressWarnings("Convert2Diamond") List<LocalBook> bookList = new ArrayList<LocalBook>();
         // Select All Query
@@ -123,11 +153,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
         cursor.close();
-        // return contact list
+        // return book list
         return bookList;
     }
 
-    // code to update the single book
+    /**
+     *  Function to update a book object in the database.
+     * @param book A edited book object.
+     * @return  Success or fail.
+     */
     public int updateBook(LocalBook book) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -140,7 +174,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 new String[] { String.valueOf(book.getOpenLibraryId()) });
     }
 
-    // Deleting single book
+    /**
+     * Delete a specific book from database.
+     * @param book  The book object to delete.
+     */
     public void deleteBook(LocalBook book) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_BOOKS, openLibraryId + " = ?",
@@ -148,14 +185,20 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    // Getting contacts Count
+    /**
+     * Procedure that return the number of books in the database.
+     * @return The number of books in the dabase.
+     */
     public long getBooksCount() {
         SQLiteDatabase db = this.getReadableDatabase();
         long count = DatabaseUtils.queryNumEntries(db, TABLE_BOOKS);
         db.close();
         return count;
     }
-    // Getting contacts Count
+    /**
+     * Procedure that return the number of books for a isbn number in the database.
+     * @return The number of books in the dabase.
+     */
     public long getBooksCount(String isbn) {
         SQLiteDatabase db = this.getReadableDatabase();
         long count = DatabaseUtils.queryNumEntries(db,TABLE_BOOKS,  "openLibraryId =" + isbn);
