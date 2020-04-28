@@ -55,8 +55,6 @@ class InlineScanActivity : AppCompatActivity() {
         simple_recyclerview.adapter = adapter
         var booklist = db.allBooks
         adapter.submitList(booklist)
-
-
         btnScan.setOnClickListener {
             //txtResult.text = "scanning..."
             val toast = Toast.makeText(applicationContext, text, duration)

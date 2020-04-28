@@ -4,11 +4,9 @@ package com.mickenet.privatelibrarian.books
  * Bookadapter for use in a resycle view.
  */
 import android.annotation.SuppressLint
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +19,9 @@ import kotlinx.android.synthetic.main.item_books.view.*
  * Costructor
  */
 class BookAdapter : ListAdapter<LocalBook, BookAdapter.ItemViewholder>(DiffCallback()) {
+    init{
+
+    }
     /**
      * Function to inflate xml resource.
      */
@@ -51,10 +52,10 @@ class BookAdapter : ListAdapter<LocalBook, BookAdapter.ItemViewholder>(DiffCallb
             Glide.with(this).load(item.coverMedium).into(itemView.ivBookCover);
             val db : DatabaseHandler = DatabaseHandler(itemView.context)
             itemView.setOnCreateContextMenuListener { contextMenu, _, _ ->
-
                 contextMenu.add(R.string.contextDelete).setOnMenuItemClickListener {
                     val book : LocalBook? = item
                     db.deleteBook(book)
+
                     true
                 }
                 contextMenu.add(R.string.contextInfo).setOnMenuItemClickListener {
@@ -64,7 +65,6 @@ class BookAdapter : ListAdapter<LocalBook, BookAdapter.ItemViewholder>(DiffCallb
                 }
             }
         }
-
     }
 
     /**

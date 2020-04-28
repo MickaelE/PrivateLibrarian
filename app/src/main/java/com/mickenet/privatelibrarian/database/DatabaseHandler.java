@@ -40,7 +40,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         this.context = context;
         //3rd argument to be passed is CursorFactory instance
     }
-
     /**
      * Initial setup of connection to sqllite database
      * @param db object of type SQLiteDatabase.
@@ -81,7 +80,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_TITLE, books.getTitle());
         if(books.getCoverMedium() !=null)
             values.put(KEY_URI, books.getCoverMedium().toString());
-
         // Inserting Row
         try {
             db.insert(TABLE_BOOKS, null, values);
