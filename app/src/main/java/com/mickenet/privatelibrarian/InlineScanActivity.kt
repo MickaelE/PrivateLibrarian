@@ -4,6 +4,7 @@ package com.mickenet.privatelibrarian
  * Class to handle scanning actiivty.
  */
 
+import android.app.usage.UsageEvents
 import android.content.Context
 import android.os.*
 import android.view.Menu
@@ -151,14 +152,14 @@ class InlineScanActivity : AppCompatActivity() {
             for (book in bookList) {
                 var index = oldList.size
                 db.addBook(book)
-                oldList.add(index + 1,book)
             }
             }
         } catch (e: Exception) {
             val toast = Toast.makeText(applicationContext, e.message, duration)
             toast.show()
         }finally {
-            adapter.submitList(oldList)
+            var booklist = db.allBooks
+            adapter.submitList(booklist)
         }
 
     }

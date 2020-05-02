@@ -11,14 +11,17 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.api.services.books.Books
 import com.mickenet.privatelibrarian.R
 import com.mickenet.privatelibrarian.database.DatabaseHandler
 import kotlinx.android.synthetic.main.item_books.view.*
+import java.util.*
 
 /**
  * Costructor
  */
 class BookAdapter : ListAdapter<LocalBook, BookAdapter.ItemViewholder>(DiffCallback()) {
+
     init{
 
     }
@@ -40,7 +43,6 @@ class BookAdapter : ListAdapter<LocalBook, BookAdapter.ItemViewholder>(DiffCallb
         holder.bind(getItem(position))
 
     }
-
     /**
      *  procedure to get position and data for a special row in list.
      */
@@ -55,7 +57,6 @@ class BookAdapter : ListAdapter<LocalBook, BookAdapter.ItemViewholder>(DiffCallb
                 contextMenu.add(R.string.contextDelete).setOnMenuItemClickListener {
                     val book : LocalBook? = item
                     db.deleteBook(book)
-
                     true
                 }
                 contextMenu.add(R.string.contextInfo).setOnMenuItemClickListener {
