@@ -4,12 +4,11 @@ package com.mickenet.privatelibrarian
  * Class to handle scanning actiivty.
  */
 
-import android.app.usage.UsageEvents
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.*
-import android.view.Menu
-import android.view.MenuItem
-import android.widget.AdapterView
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,7 +42,7 @@ class InlineScanActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_inline_scan)
-
+        getVersionInfo()
         val text = "scanning..."
         val duration = Toast.LENGTH_SHORT
         var policy: StrictMode.ThreadPolicy = StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -87,7 +86,22 @@ class InlineScanActivity : AppCompatActivity() {
                 }
             })
         }
+        val recyclerView: RecyclerView = simple_recyclerview
+        recyclerView.addOnItemTouchListener(
+            RecyclerItemClickListener(
+                this,
+                recyclerView,
+                object : RecyclerItemClickListener.OnItemClickListener {
+                    override fun onItemClick(view: View?, position: Int) {
+                        deleteBook(adapter.currentList.get(position))
+                    }
 
+                    override fun onLongItemClick(view: View?, position: Int) {
+                      adapter.notifyDataSetChanged()
+
+                    }
+                })
+        )
         btnTorch.setOnClickListener {
             if (torchState) {
                 torchState = false
@@ -130,11 +144,20 @@ class InlineScanActivity : AppCompatActivity() {
      * Fucntion to delete a book.
      */
     public fun deleteBook(isbn: LocalBook) {
-    db.deleteBook(isbn)
-    adapter.notifyItemRemoved( adapter.currentList.indexOf(isbn))
+        val duration = Toast.LENGTH_SHORT
+        try {
+            //val indx = adapter.currentList.indexOf(isbn)
+            //adapter.currentList.removeAt(indx)
+            db.deleteBook(isbn)
+            var booklist = db.allBooks
+            adapter.submitList(booklist)
+        } catch (e: Exception) {
+            val toast = Toast.makeText(applicationContext, e.message, duration)
+            toast.show()
+        }
 }
 
-    /**
+   /**
      * Fucntion to fetch a book.
      */
     private fun fetchBooks(isbn: String) {
@@ -158,10 +181,37 @@ class InlineScanActivity : AppCompatActivity() {
             val toast = Toast.makeText(applicationContext, e.message, duration)
             toast.show()
         }finally {
-            var booklist = db.allBooks
-            adapter.submitList(booklist)
+            saveData()
         }
 
+    }
+    private fun saveData() {
+        var booklist = db.allBooks
+        adapter.submitList(booklist)
+    }
+
+    //get the current version number and name
+    private fun getVersionInfo() {
+        var versionName = ""
+        var versionCode = -1
+        try {
+            val packageInfo =
+                packageManager.getPackageInfo(packageName, 0)
+            versionName = packageInfo.versionName
+            versionCode = packageInfo.versionCode
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
+
+        val textViewVersionInfo = findViewById<TextView>(R.id.textview_version_info)
+        textViewVersionInfo.text = String.format(
+            "Version name = %s Version code = %d",
+            versionName,
+            versionCode
+        )
+    }
+    private fun syncData(){
+        //todo: Skapa anrop till soap services för att spara och ta bord data från bibliotek.
     }
 }
 

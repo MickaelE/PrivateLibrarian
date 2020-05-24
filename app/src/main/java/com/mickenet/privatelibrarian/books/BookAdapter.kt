@@ -15,13 +15,13 @@ import com.google.api.services.books.Books
 import com.mickenet.privatelibrarian.R
 import com.mickenet.privatelibrarian.database.DatabaseHandler
 import kotlinx.android.synthetic.main.item_books.view.*
+import kotlinx.coroutines.withContext
 import java.util.*
 
 /**
  * Costructor
  */
 class BookAdapter : ListAdapter<LocalBook, BookAdapter.ItemViewholder>(DiffCallback()) {
-
     init{
 
     }
@@ -41,13 +41,14 @@ class BookAdapter : ListAdapter<LocalBook, BookAdapter.ItemViewholder>(DiffCallb
      */
     override fun onBindViewHolder(holder: ItemViewholder, position: Int) {
         holder.bind(getItem(position))
-
     }
     /**
      *  procedure to get position and data for a special row in list.
      */
     override fun getItemId(position: Int): Long = position.toLong()
+
     class ItemViewholder(itemView: View) : RecyclerView.ViewHolder(itemView)  {
+        var mListRef: List<LocalBook>? = null
         fun bind(item: LocalBook) = with(itemView) {
             itemView.tvTitle.text = item.title
             itemView.tvAuthor.text = item.author
@@ -55,11 +56,14 @@ class BookAdapter : ListAdapter<LocalBook, BookAdapter.ItemViewholder>(DiffCallb
             val db : DatabaseHandler = DatabaseHandler(itemView.context)
             itemView.setOnCreateContextMenuListener { contextMenu, _, _ ->
                 contextMenu.add(R.string.contextDelete).setOnMenuItemClickListener {
+                    //todo: manage to udate list after delete and reload.
                     val book : LocalBook? = item
                     db.deleteBook(book)
+
                     true
                 }
                 contextMenu.add(R.string.contextInfo).setOnMenuItemClickListener {
+                    //todo: Create a infolist and return to popup screen.
                  var book = item
                     db.deleteBook(book)
                     true

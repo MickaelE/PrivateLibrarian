@@ -1,8 +1,9 @@
 package com.mickenet.privatelibrarian
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
-import android.view.MenuItem
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity() {
                 IntentIntegrator(this@MainActivity).initiateScan()
             }
         }
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
