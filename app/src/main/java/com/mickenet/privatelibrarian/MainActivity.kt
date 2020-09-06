@@ -48,7 +48,5 @@ class MainActivity : AppCompatActivity() {
             txtValue.text = scannedResult
         }
     }
-
-
 }
 
